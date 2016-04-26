@@ -1,5 +1,7 @@
 context("logger")
 
+fsep <- .Platform$file.sep
+
 test_that("logger writes to file", {
     log_file_path = paste('/tmp', 'logger_writes_to_file', sep=fsep)
     logger.init(log.toFile=TRUE, log.toConsole=FALSE, log.toAwslogs=FALSE,

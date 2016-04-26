@@ -5,3 +5,4 @@ dev.env
 rlibs/
 codeship.aes
 tests/data/output/*.csv
+*rlearn.log
