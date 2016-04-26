@@ -1,0 +1,7 @@
+..Rcheck/
+*.Rproj
+.DS_Store
+dev.env
+rlibs/
+codeship.aes
+tests/data/output/*.csv

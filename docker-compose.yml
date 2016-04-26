@@ -1,0 +1,14 @@
+dev:
+  container_name: rlearn
+  build: .
+  volumes:
+    - ./:/opt/rlearn
+  env_file: ./dev.env
+  command: ['/bin/bash']
+test:
+  container_name: rlearn
+  build: .
+  volumes:
+    - ./:/opt/rlearn
+  env_file: ./dev.env
+  command: r ./test.r

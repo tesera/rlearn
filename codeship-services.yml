@@ -1,0 +1,4 @@
+rlearn:
+  build:
+    dockerfile_path: Dockerfile
+  encrypted_env_file: dev.env.encrypted
