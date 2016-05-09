@@ -23,6 +23,7 @@ lda <- function(xy, config,
     xy[] <- lapply(xy, convertToStringIfFactor)
     config[] <- lapply(config, convertToStringIfFactor)
     xy <- removeRowsByColValue(xy, removeRowValue, removeRowColName)
+    xy <- xy[complete.cases(xy),]
     y <- classificationVariableToFactor(xy, classifiedVarName=classVariableName)
     classPriorProbs <- lda.calcPriorClassProbDist(y, priorDistributionIsSample)
     ctabPost <- lda.runLooLdaForModels(y, xy, config, classPriorProbs)
@@ -132,7 +133,7 @@ lda.runLooLdaForModels <- function(y, x, models, yClassPriors) {
         uniqueClasses <- sort(unique(y))
         classNumberList <- as.numeric(levels(uniqueClasses))
 
-        lvi.lda <- MASS::lda(xSub, y, prior=yClassPriors, CV=TRUE, na.action=na.omit)
+        lvi.lda <- MASS::lda(xSub, y, prior=yClassPriors, CV=TRUE)
 
         class.pred <- lvi.lda$class # Predictions
         class.table <- table(y, class.pred) # Contingency table
@@ -195,7 +196,7 @@ lda.runLdaAllDataForModels <- function(y, x, models, yClassPriors) {
         varNames <- names(xSub)
         nVar <- length(varNames)
 
-        lvi.lda = MASS::lda(xSub, y, yClassPriors, CV=FALSE, na.action=na.omit)
+        lvi.lda = MASS::lda(xSub, y, yClassPriors, CV=FALSE)
 
         class.pred = predict(lvi.lda)
         class.table = table(y, class.pred$class)
