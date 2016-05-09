@@ -23,6 +23,7 @@ lda <- function(xy, config,
     xy[] <- lapply(xy, convertToStringIfFactor)
     config[] <- lapply(config, convertToStringIfFactor)
     xy <- removeRowsByColValue(xy, removeRowValue, removeRowColName)
+    xy <- xy[complete.cases(xy),]
     y <- classificationVariableToFactor(xy, classifiedVarName=classVariableName)
     classPriorProbs <- lda.calcPriorClassProbDist(y, priorDistributionIsSample)
     ctabPost <- lda.runLooLdaForModels(y, xy, config, classPriorProbs)

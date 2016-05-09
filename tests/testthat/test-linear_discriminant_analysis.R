@@ -33,8 +33,6 @@ test_that("lda matches legacy", {
     expect_true(legacyMatchesExpectedOutput('CTABALL.csv'))
 })
 
-
-## ------------------------------- Legacy -------------------------------------
 test_that("lda types are correct", {
     lviFileName <- system.file("extdata", "ANALYSIS.csv", package = "rlearn")
     xVarSelectFileName <- system.file("extdata", "XVARSELV.csv", package = "rlearn")
@@ -109,6 +107,26 @@ test_that("Class prior probs in same order as levels of response", {
     expect_equal(priors, knownPriors)
 })
 
+# ---------------------------------- LDA --------------------------------------
+test_that("lda works with NAs in X", {
+    lviFileName <- system.file("extdata", "ANALYSIS.csv", package = "rlearn")
+    xVarSelectFileName <- system.file("extdata", "XVARSELV.csv", package = "rlearn")
+    outDir <- '/opt/rlearn/tests/data/output'
+
+    xy <- read.csv(lviFileName, header=T, row.names=1)
+    config <- read.csv(xVarSelectFileName,
+                       header=T, row.names=1,
+                       strip.white=TRUE,
+                       na.strings = c("NA",""))
+    xy[1,] <- NA
+    ldaResult <- lda(xy,
+                     config,
+                     removeRowColName='SORTGRP',
+                     removeRowValue=-1,
+                     classVariableName='VAR47',
+                     priorDistributionIsSample=TRUE)
+    expect_true(is.list(ldaResult))
+})
 
 ## --------------------------------- Orig -------------------------------------
 ## excludeRowValue = -1
