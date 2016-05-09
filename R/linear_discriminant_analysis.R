@@ -132,7 +132,7 @@ lda.runLooLdaForModels <- function(y, x, models, yClassPriors) {
         uniqueClasses <- sort(unique(y))
         classNumberList <- as.numeric(levels(uniqueClasses))
 
-        lvi.lda <- MASS::lda(xSub, y, prior=yClassPriors, CV=TRUE)
+        lvi.lda <- MASS::lda(xSub, y, prior=yClassPriors, CV=TRUE, na.action=na.omit)
 
         class.pred <- lvi.lda$class # Predictions
         class.table <- table(y, class.pred) # Contingency table
@@ -195,7 +195,7 @@ lda.runLdaAllDataForModels <- function(y, x, models, yClassPriors) {
         varNames <- names(xSub)
         nVar <- length(varNames)
 
-        lvi.lda = MASS::lda(xSub, y, yClassPriors, CV=FALSE)
+        lvi.lda = MASS::lda(xSub, y, yClassPriors, CV=FALSE, na.action=na.omit)
 
         class.pred = predict(lvi.lda)
         class.table = table(y, class.pred$class)
