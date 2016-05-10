@@ -25,6 +25,13 @@ lda <- function(xy, config,
     xy <- removeRowsByColValue(xy, removeRowValue, removeRowColName)
     xy <- xy[complete.cases(xy),]
     y <- classificationVariableToFactor(xy, classifiedVarName=classVariableName)
+    if (length(levels(y))==1) {
+        msg <- sprintf('Response variable, %s, is degenerate',
+                       classVariableName)
+        logerror(msg)
+        stop(msg)
+    }
+
     classPriorProbs <- lda.calcPriorClassProbDist(y, priorDistributionIsSample)
     ctabPost <- lda.runLooLdaForModels(y, xy, config, classPriorProbs)
     ldaResult <- lda.runLdaAllDataForModels(y, xy, config, classPriorProbs)

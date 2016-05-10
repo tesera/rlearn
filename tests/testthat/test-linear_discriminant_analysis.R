@@ -128,6 +128,28 @@ test_that("lda works with NAs in X", {
     expect_true(is.list(ldaResult))
 })
 
+
+test_that("lda raises useful error if yvar is degenerate", {
+    lviFileName <- system.file("extdata", "ANALYSIS.csv", package = "rlearn")
+    xVarSelectFileName <- system.file("extdata", "XVARSELV.csv", package = "rlearn")
+    outDir <- '/opt/rlearn/tests/data/output'
+
+    xy <- read.csv(lviFileName, header=T, row.names=1)
+    config <- read.csv(xVarSelectFileName,
+                       header=T, row.names=1,
+                       strip.white=TRUE,
+                       na.strings = c("NA",""))
+
+    xy$Y <- 1
+    expect_error(lda(xy,
+                     config,
+                     removeRowColName='SORTGRP',
+                     removeRowValue=-1,
+                     classVariableName='Y',
+                     priorDistributionIsSample=TRUE),
+                 'Response variable, Y, is degenerate')
+})
+
 ## --------------------------------- Orig -------------------------------------
 ## excludeRowValue = -1
 ## excludeRowVarName <- 'SORTGRP'
