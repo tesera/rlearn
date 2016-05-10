@@ -23,7 +23,6 @@ lda <- function(xy, config,
     xy[] <- lapply(xy, convertToStringIfFactor)
     config[] <- lapply(config, convertToStringIfFactor)
     xy <- removeRowsByColValue(xy, removeRowValue, removeRowColName)
-    xy <- xy[complete.cases(xy),]
     y <- classificationVariableToFactor(xy, classifiedVarName=classVariableName)
     if (length(levels(y))==1) {
         msg <- sprintf('Response variable, %s, is degenerate',
@@ -136,7 +135,9 @@ lda.runLooLdaForModels <- function(y, x, models, yClassPriors) {
         varsInModeliNames <- models[i,firstVarCol:modelsNumCols][varsInModeliIndex]
         nVariables <- length(varsInModeliNames)
         xSub <- dplyr::select_(x, .dots=varsInModeliNames) # select by vector of colnames and leave as df
-
+        sel <- complete.cases(xSub)
+        xSub <- xSub[sel, , drop=FALSE]
+        y <- y[sel]
         uniqueClasses <- sort(unique(y))
         classNumberList <- as.numeric(levels(uniqueClasses))
 
@@ -199,6 +200,9 @@ lda.runLdaAllDataForModels <- function(y, x, models, yClassPriors) {
         varsInModeliIndex <- models[i,firstVarCol:modelsNumCols] != 'N'
         varsInModeliNames <- models[i,firstVarCol:modelsNumCols][varsInModeliIndex]
         xSub <- dplyr::select_(x, .dots=varsInModeliNames) # select by vector of colnames and leave as df
+        sel <- complete.cases(xSub)
+        xSub <- xSub[sel, , drop=FALSE]
+        y <- y[sel]
 
         varNames <- names(xSub)
         nVar <- length(varNames)
