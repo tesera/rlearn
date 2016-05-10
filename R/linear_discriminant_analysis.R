@@ -122,7 +122,6 @@ lda.runLooLdaForModels <- function(y, x, models, yClassPriors) {
 
     modelsNumRows <- length(models[,1])
     modelsNumCols <- length(models)
-    nObs <- length(x[,1])
     nClasses <- length(levels(y))
 
     for (i in 1:modelsNumRows) {
@@ -138,6 +137,7 @@ lda.runLooLdaForModels <- function(y, x, models, yClassPriors) {
         sel <- complete.cases(xSub)
         xSub <- xSub[sel, , drop=FALSE]
         y <- y[sel]
+        nObs <- sum(sel)
         uniqueClasses <- sort(unique(y))
         classNumberList <- as.numeric(levels(uniqueClasses))
 
@@ -185,7 +185,6 @@ lda.runLdaAllDataForModels <- function(y, x, models, yClassPriors) {
 
     modelsNumRows <- length(models[,1])
     modelsNumCols <- length(models)
-    nObs <- length(x[,1])
     nClasses <- length(levels(y))
 
     ## TODO: initialize with lengths to avoid copy
