@@ -118,7 +118,7 @@ test_that("lda works with NAs in X", {
                        header=T, row.names=1,
                        strip.white=TRUE,
                        na.strings = c("NA",""))
-    xy[1,] <- NA
+    xy[1,'VAR1091'] <- NA
     ldaResult <- lda(xy,
                      config,
                      removeRowColName='SORTGRP',
