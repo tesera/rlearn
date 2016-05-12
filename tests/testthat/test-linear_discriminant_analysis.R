@@ -118,7 +118,7 @@ test_that("lda works with NAs in X", {
                        header=T, row.names=1,
                        strip.white=TRUE,
                        na.strings = c("NA",""))
-    xy[1,] <- NA
+    xy[1,'VAR1091'] <- NA
     ldaResult <- lda(xy,
                      config,
                      removeRowColName='SORTGRP',
@@ -148,6 +148,72 @@ test_that("lda raises useful error if yvar is degenerate", {
                      classVariableName='Y',
                      priorDistributionIsSample=TRUE),
                  'Response variable, Y, is degenerate')
+})
+
+test_that("lda raises if variable in config not found in columns of X", {
+    lviFileName <- system.file("extdata", "ANALYSIS.csv", package = "rlearn")
+    xVarSelectFileName <- system.file("extdata", "XVARSELV.csv", package = "rlearn")
+    outDir <- '/opt/rlearn/tests/data/output'
+
+    xy <- read.csv(lviFileName, header=T, row.names=1)
+    config <- read.csv(xVarSelectFileName,
+                       header=T,
+                       strip.white=TRUE,
+                       na.strings = c("NA",""))
+
+    expect_error(lda(xy,
+                     config,
+                     removeRowColName='SORTGRP',
+                     removeRowValue=-1,
+                     classVariableName='VAR47',
+                     priorDistributionIsSample=TRUE),
+                 'missing from X')
+})
+
+test_that("cql11 data", {
+    lviFileName <- system.file("extdata", "data_xy_cql11.csv",
+                               package = "rlearn")
+    xVarSelectFileName <- system.file("extdata", "vsel_x_cql11.csv",
+                                      package = "rlearn")
+    outDir <- '/opt/rlearn/tests/data/output'
+
+    xy <- read.csv(lviFileName, header=T, row.names=1)
+    config <- read.csv(xVarSelectFileName,
+                       header=T, row.names=1,
+                       strip.white=TRUE,
+                       na.strings = c("NA",""))
+
+    lda <- lda(xy,
+               config,
+               removeRowColName='SORTGRP',
+               removeRowValue=-1,
+               classVariableName='Y',
+               priorDistributionIsSample=TRUE)
+    expect_true(is.list(lda))
+
+})
+
+test_that("cql12 data", {
+    lviFileName <- system.file("extdata", "data_xy_cql.csv",
+                               package = "rlearn")
+    xVarSelectFileName <- system.file("extdata", "vsel_x_cql.csv",
+                                      package = "rlearn")
+    outDir <- '/opt/rlearn/tests/data/output'
+
+    xy <- read.csv(lviFileName, header=T, row.names=1)
+    config <- read.csv(xVarSelectFileName,
+                       header=T, row.names=1,
+                       strip.white=TRUE,
+                       na.strings = c("NA",""))
+
+    lda <- lda(xy,
+               config,
+               removeRowColName='SORTGRP',
+               removeRowValue=-1,
+               classVariableName='Y',
+               priorDistributionIsSample=TRUE)
+    expect_true(is.list(lda))
+
 })
 
 ## --------------------------------- Orig -------------------------------------
