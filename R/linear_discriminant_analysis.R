@@ -11,13 +11,16 @@ library(dplyr)
 ##' @param dataDir directory path to write intermediate data files
 ##' @param writeIntermediateDataFiles TRUE to write intermediate data to disk
 ##' @param attachOutput TRUE to attach to global environment,
+##' @param modelsFirstVarColumnIndex index of the first column which corresponds
+##' to a model variable
 ##' mainly for python clients
 ##'
 ##' @return
 lda <- function(xy, config,
                 removeRowColName, removeRowValue,
                 classVariableName, priorDistributionIsSample,
-                dataDir, writeIntermediateDataFiles=FALSE, attachOutput=FALSE) {
+                dataDir, writeIntermediateDataFiles=FALSE, attachOutput=FALSE,
+                modelsFirstVarColumnIndex=4) {
     log_parent_function_call()
 
     xy[] <- lapply(xy, convertToStringIfFactor)
@@ -32,8 +35,10 @@ lda <- function(xy, config,
     }
 
     classPriorProbs <- lda.calcPriorClassProbDist(y, priorDistributionIsSample)
-    ctabPost <- lda.runLooLdaForModels(y, xy, config, classPriorProbs)
-    ldaResult <- lda.runLdaAllDataForModels(y, xy, config, classPriorProbs)
+    ctabPost <- lda.runLooLdaForModels(y, xy, config, classPriorProbs,
+                                       modelsFirstVarCol=modelsFirstVarColumnIndex)
+    ldaResult <- lda.runLdaAllDataForModels(y, xy, config, classPriorProbs,
+                                            modelsFirstVarCol=modelsFirstVarColumnIndex)
 
     retList <- list(
         lda.prior=classPriorProbs,
@@ -115,7 +120,7 @@ lda.calcPriorClassProbDist <- function(y, yIsSample=TRUE) {
 ##' of \param{y}
 ##'
 ##' @return list with two data frames - class tabulation and ?posteriors
-lda.runLooLdaForModels <- function(y, x, models, yClassPriors) {
+lda.runLooLdaForModels <- function(y, x, models, yClassPriors, modelsFirstVarCol=4) {
     log_parent_function_call()
 
     PREDCLASS <- CTAB <- VARSET <- UERROR <- EVARSET <- NVAR <- REFCLASS <- c()
@@ -129,9 +134,16 @@ lda.runLooLdaForModels <- function(y, x, models, yClassPriors) {
 
         ## get the logical index of the row which does not have 'N'for the var columns
         ## fill the dummy dataframe with the subset of x matching the above subvector
-        firstVarCol <- 4
-        varsInModeliIndex <- models[i,firstVarCol:modelsNumCols] != 'N'
-        varsInModeliNames <- models[i,firstVarCol:modelsNumCols][varsInModeliIndex]
+        modelVarCols <- colnames(models)[modelsFirstVarCol:modelsNumCols]
+        logdebug('Columns: %s are being used to identify variables for models',
+                 modelVarCols)
+        varsInModeliIndex <- models[i,modelsFirstVarCol:modelsNumCols] != 'N'
+        varsInModeliNames <- models[i,modelsFirstVarCol:modelsNumCols][varsInModeliIndex]
+        missingVarIndex <- !(varsInModeliNames %in% colnames(x))
+        if(any(missingVarIndex)){
+            stop('Columns: ', varsInModeliNames[missingVarIndex], ' missing from X')
+        }
+
         nVariables <- length(varsInModeliNames)
         xSub <- dplyr::select_(x, .dots=varsInModeliNames) # select by vector of colnames and leave as df
         sel <- complete.cases(xSub)
@@ -180,7 +192,7 @@ lda.runLooLdaForModels <- function(y, x, models, yClassPriors) {
 ##'
 ##' @return list with 4 data frames - class tabulations, variable means,
 ##' discr. functions and variance ratios
-lda.runLdaAllDataForModels <- function(y, x, models, yClassPriors) {
+lda.runLdaAllDataForModels <- function(y, x, models, yClassPriors, modelsFirstVarCol=4) {
     log_parent_function_call()
 
     modelsNumRows <- length(models[,1])
@@ -195,9 +207,16 @@ lda.runLdaAllDataForModels <- function(y, x, models, yClassPriors) {
     for (i in 1:modelsNumRows) {
         ## get the logical index of the row which does not have 'N'for the var columns
         ## fill the dummy dataframe with the subset of x matching the above subvector
-        firstVarCol <- 4
-        varsInModeliIndex <- models[i,firstVarCol:modelsNumCols] != 'N'
-        varsInModeliNames <- models[i,firstVarCol:modelsNumCols][varsInModeliIndex]
+        modelVarCols <- colnames(models)[modelsFirstVarCol:modelsNumCols]
+        logdebug('Columns %s are being used to identify variables for models',
+                 modelVarCols)
+        varsInModeliIndex <- models[i,modelsFirstVarCol:modelsNumCols] != 'N'
+        varsInModeliNames <- models[i,modelsFirstVarCol:modelsNumCols][varsInModeliIndex]
+        missingVarIndex <- !(varsInModeliNames %in% colnames(x))
+        if (any(missingVarIndex)){
+            stop('Columns: ', varsInModeliNames[missingVarIndex], ' missing from X')
+        }
+
         xSub <- dplyr::select_(x, .dots=varsInModeliNames) # select by vector of colnames and leave as df
         sel <- complete.cases(xSub)
         xSub <- xSub[sel, , drop=FALSE]
