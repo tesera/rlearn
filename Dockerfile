@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libcurl4-openssl-dev \
     git \
     python-pip \
+    python-setuptools \
 && rm -rf /var/lib/apt/lists/*
 
 RUN pip install awscli

@@ -34,30 +34,36 @@ test_that("log_parent_function_call works", {
 })
 
 test_that("logger writes to aws logs", {
+    stream <- UUIDgenerate()
     logger.init(log.toFile=FALSE, log.toConsole=FALSE, log.toAwslogs=TRUE,
-                awslogs.logGroup = 'rlearn-test', awslogs.logStream='my-test-stream', log.level='FINEST')
+                awslogs.logGroup='rlearn-test', log.level='FINEST',
+                awslogs.logStream=stream)
 
     loginfo('I even log to AWS!')
-
-    result <- awslogs.getLogEvents('rlearn-test', 'my-test-stream')
+    result <- awslogs.getLogEvents('rlearn-test', stream)
     log_regex <- '[0-9]{4}(-[0-9]{2}){2} ([0-9]{2}:?){3} INFO::I even log to AWS!'
-    expect_match(result$events['message'], log_regex)
+    expect_match(result$events$message, log_regex)
 
     logReset()
     awslogs.deleteLogGroup('rlearn-test')
 })
 
 test_that("logger writes to aws logs twice", {
+    stream <- UUIDgenerate()
     logger.init(log.toFile=FALSE, log.toConsole=FALSE, log.toAwslogs=TRUE,
-                awslogs.logGroup = 'rlearn-test', awslogs.logStream='my-test-stream', log.level='FINEST')
+                awslogs.logGroup='rlearn-test', log.level='FINEST',
+                awslogs.logStream=stream)
 
     loginfo('I even log to AWS!')
     loginfo('I even log to AWS 2!')
 
-    result <- awslogs.getLogEvents('rlearn-test', 'my-test-stream')
+    result <- awslogs.getLogEvents('rlearn-test', stream)
     log_regex <- '[0-9]{4}(-[0-9]{2}){2} ([0-9]{2}:?){3} INFO::I even log to AWS 2!'
-    expect_match(result$events[2,'message'], log_regex)
+    expect_match(result$events$message[2], log_regex)
 
     logReset()
     awslogs.deleteLogGroup('rlearn-test')
 })
+
+# reset logger so additional tests use defaults
+logger.init()

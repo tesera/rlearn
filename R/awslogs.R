@@ -7,7 +7,8 @@ awslogs.createLogGroup <- function(logGroupName,
     aws.cmd <- paste("aws logs create-log-group",
                     paste("--log-group-name ", logGroupName),
                     paste("--region ", region))
-    system(aws.cmd, intern = FALSE, ignore.stdout = TRUE, ignore.stderr = verbose)
+    system(aws.cmd, intern = FALSE, ignore.stdout = TRUE, ignore.stderr = verbose,
+           wait=TRUE)
 }
 
 awslogs.createLogStream <- function(logGroupName, logStreamName, region = "us-east-1", verbose = TRUE, debug = TRUE) {
@@ -15,7 +16,8 @@ awslogs.createLogStream <- function(logGroupName, logStreamName, region = "us-ea
                     paste("--log-group-name ", logGroupName),
                     paste("--log-stream-name ", logStreamName),
                     paste("--region ", region))
-    system(aws.cmd, intern = FALSE, ignore.stdout = TRUE, ignore.stderr = verbose)
+    system(aws.cmd, intern = FALSE, ignore.stdout = TRUE, ignore.stderr = verbose,
+           wait=TRUE)
 }
 
 awslogs.putLogEvents <- function(logGroupName, logStreamName, logEvents, sequenceToken, region = "us-east-1", verbose = TRUE, debug = TRUE) {
@@ -42,5 +44,6 @@ awslogs.deleteLogGroup <- function(logGroupName, logStreamName, region = "us-eas
     aws.cmd <- paste("aws logs delete-log-group",
                     paste("--log-group-name ", logGroupName),
                     paste("--region ", region))
-    system(aws.cmd, intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
+    system(aws.cmd, intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE,
+           wait=TRUE)
 }
