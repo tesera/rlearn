@@ -148,7 +148,7 @@ test_that("vs.removeDegenerateColumns works with valid input", {
 
     nOrig <- length(datOrig)
     nNew <- length(datNew)
-    expect_less_than(nNew, nOrig)
+    expect_lt(nNew, nOrig)
     expect_equal(nNew, nOrig-1)
 })
 
