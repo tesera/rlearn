@@ -1,25 +1,13 @@
 library('logging')
 library('uuid')
 
-## TODO: move to utils
-##' @title Get environment variable
-##'
-##' @param envvar name of environment variable (case sensitive)
-##' @param default if \param{envvar} not defined in environment
-##'
-##' @return string, value of environment variable or default
-get_envvar_or_default <- function(envvar, default=""){
-    envvar <- Sys.getenv(envvar)
-    envvar <- ifelse(envvar != "", envvar, default)
-    return(envvar)
-}
 
-log_level <- get_envvar_or_default('LOGGING_LEVEL', 'INFO')
-aws_logs <- get_envvar_or_default('AWS_LOGS', 'false')
+log_level <- Sys.getenv('LOGGING_LEVEL', 'INFO')
+aws_logs <- Sys.getenv('AWS_LOGS', 'false')
 aws_logs_bool <- tolower(aws_logs) == 'true'
-aws_region <- get_envvar_or_default('AWS_REGION', 'us-east-1')
-aws_logs_group <- get_envvar_or_default('AWS_LOGS_GROUP', 'rlearn')
-aws_logs_stream <- get_envvar_or_default('AWS_LOGS_STREAM', UUIDgenerate())
+aws_region <- Sys.getenv('AWS_REGION', 'us-east-1')
+aws_logs_group <- Sys.getenv('AWS_LOGS_GROUP', 'rlearn')
+aws_logs_stream <- Sys.getenv('AWS_LOGS_STREAM', UUIDgenerate())
 
 cloudwatch <- function(msg, handler, ...) {
     if(length(list(...)) && 'dry' %in% names(list(...)))
