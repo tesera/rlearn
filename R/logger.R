@@ -26,7 +26,7 @@ cloudwatch <- function(msg, handler, ...) {
     handler$nextSequenceToken <- res$nextSequenceToken
 }
 
-logger.init <- function(log.level = 'INFO',
+logger.init <- function(log.level = log_level,
                         log.toConsole = FALSE,
                         log.toFile = TRUE,
                         log.file = 'rlearn.log',
