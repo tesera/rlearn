@@ -6,8 +6,9 @@
 ##'
 ##' @return TRUE if file contents are identical
 legacyMatchesExpectedOutput <- function(fileName,
-                                          outDirExpected='/opt/rlearn/tests/data/expected',
-                                          outDir='/opt/rlearn/tests/data/output') {
+                                        outDirExpected='/opt/rlearn/tests/data/expected',
+                                        outDir='/opt/rlearn/tests/data/output',
+                                        tol=0.1) {
     fsep <- .Platform$file.sep
 
     legacyFile = paste(outDirExpected, fileName, sep=fsep)
@@ -22,7 +23,7 @@ legacyMatchesExpectedOutput <- function(fileName,
                                stringsAsFactors=FALSE,
                                strip.white=TRUE, na.strings = c("NA",""))
 
-    match <- identical(legacyData, refactoredData)
+    match <- all.equal(legacyData, refactoredData, tolerance=tol)
     return(match)
 }
 

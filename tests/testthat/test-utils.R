@@ -34,11 +34,12 @@ test_that("Expected check works", {
     dat <- generateRandomDataFrame(10,10)
 
     write.csv(dat, file=legacyFile, row.names=FALSE, na="")
-    write.csv(dat, file=refactoredFile, row.names=FALSE, na="")
+    write.csv(dat+0.01, file=refactoredFile, row.names=FALSE, na="")
 
     expect_true(
         legacyMatchesExpectedOutput('test_data.csv',
-                                      outDirExpected=outDirExpected, outDir=outDir)
+                                    outDirExpected=outDirExpected, outDir=outDir,
+                                    tol=0.1)
     )
     file.remove(legacyFile, refactoredFile)
 })
