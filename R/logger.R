@@ -41,10 +41,10 @@ logger.init <- function(log.level = log_level,
     if (log.toFile) addHandler(writeToFile, file = log.file, level = log.level)
 
     if (log.toAwslogs) addHandler(cloudwatch,
-                                region = awslogs.region,
-                                logGroupName = awslogs.logGroup,
-                                logStreamName = awslogs.logStream,
-                                nextSequenceToken = 'NA',
-                                level = log.level)
+                                  region = awslogs.region,
+                                  logGroupName = awslogs.logGroup,
+                                  logStreamName = awslogs.logStream,
+                                  nextSequenceToken = 'NA',
+                                  level = log.level)
     setLevel(log.level)
 }
