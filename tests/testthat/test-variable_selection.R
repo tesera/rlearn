@@ -2,41 +2,6 @@ context("variable_selection")
 library(rlearn)
 
 
-## --------------------------------- Orig -------------------------------------
-## classVariableName <- 'CLPRDP'
-## excludeRowValue <- -1
-## excludeRowVarName <- 'SORTGRP'
-## xVarSelectCriteria <- 'X'
-## minNvar <- 1
-## maxNvar <- 10
-## nSolutions <- 10
-## criteria <- 'xi2'
-
-## lviFileName <- system.file("extdata", "ANALYSIS.csv", package = "rlearn")
-## xVarSelectFileName <- system.file("extdata", "XVARSELV1.csv", package = "rlearn")
-## uniqueVarFilePath <- system.file("extdata", "UNIQUEVAR.csv", package = "rlearn")
-## outDirLegacy <- '/opt/rlearn/tests/data/output'
-## outDir <- '/opt/rlearn/tests/data/output'
-
-## test_that("IdentifyAndOrganizeUniqueVariableSets outputs xvarselv", {
-##     outFile = paste(outDirLegacy, 'VARSELECT.csv', sep='/')
-##     vs.IdentifyAndOrganizeUniqueVariableSets(lviFileName, xVarSelectFileName,
-##                                              outFile)
-
-##     expect_that(length(lviVarNamesv) > 0, is_true())
-##     expect_that(nLviRows > 0, is_true())
-##     expect_true(file.exists(outFile))
-## })
-
-## test_that("CompleteVariableSelectionplusremovecorrelationvariables outputs UCORCOEF", {
-##     outFile = paste(outDirLegacy, 'UCORCOEF.csv', sep='/')
-##     vs.CompleteVariableSelectionPlusRemoveCorrelationVariables(lviFileName,
-##                                                                uniqueVarFilePath,
-##                                                                outFile)
-##     expect_true(file.exists(outFile))
-## })
-
-
 ## ------------------------------- Legacy -------------------------------------
 test_that("vs.selectVars xvarselv matches legacy", {
     lviFileName <- system.file("extdata", "ANALYSIS.csv", package = "rlearn")
