@@ -27,7 +27,8 @@ awslogs.putLogEvents <- function(logGroupName, logStreamName, logEvents, sequenc
                     paste("--log-events ", logEvents),
                     ifelse(sequenceToken != 'NA', paste("--sequence-token ", sequenceToken), ""),
                     paste("--region ", region))
-    res = system(aws.cmd, intern = TRUE, ignore.stdout = FALSE, ignore.stderr = TRUE)
+    res <- system(aws.cmd, intern = TRUE, ignore.stdout = FALSE, ignore.stderr = TRUE,
+                  wait=TRUE)
     fromJSON(res)
 }
 
@@ -36,7 +37,7 @@ awslogs.getLogEvents <- function(logGroupName, logStreamName, region = "us-east-
                     paste("--log-group-name ", logGroupName),
                     paste("--log-stream-name ", logStreamName),
                     paste("--region ", region))
-    res = system(aws.cmd, intern = TRUE, ignore.stdout = FALSE, ignore.stderr = TRUE)
+    res <- system(aws.cmd, intern = TRUE, ignore.stdout = FALSE, ignore.stderr = TRUE)
     fromJSON(res)
 }
 

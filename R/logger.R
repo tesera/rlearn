@@ -16,8 +16,8 @@ cloudwatch <- function(msg, handler, ...) {
     awslogs.createLogStream(with(handler, logGroupName),
                             with(handler, logStreamName),
                             with(handler, region))
-    epoch = as.integer(as.POSIXct( Sys.time() ))*1000
-    logEvents = sprintf('"timestamp=%s,message=%s"', epoch, msg)
+    epoch <- as.integer(as.POSIXct( Sys.time() ))*1000
+    logEvents <- sprintf('"timestamp=%s,message=%s"', epoch, msg)
     res <- awslogs.putLogEvents(with(handler, logGroupName),
                                 with(handler, logStreamName),
                                 logEvents,
