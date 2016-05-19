@@ -65,6 +65,37 @@ test_that("logger writes to aws logs twice", {
     logReset()
 })
 
+test_that("logger can write list-like message to cloudwatch", {
+    stream <- UUIDgenerate()
+    logger.init(log.toFile=FALSE, log.toConsole=FALSE, log.toAwslogs=TRUE,
+                awslogs.logGroup='rlearn-test', log.level='FINEST',
+                awslogs.logStream=stream)
+
+    logdebug('1,2,3,4,5,6')
+
+    result <- awslogs.getLogEvents('rlearn-test', stream)
+    log_regex <- '[0-9]{4}(-[0-9]{2}){2} ([0-9]{2}:?){3} DEBUG::1 2 3 4 5 6'
+    expect_match(result$events$message[1], log_regex)
+
+    logReset()
+})
+
+test_that("cloudwatch handler truncates long log messages", {
+    stream <- UUIDgenerate()
+    logger.init(log.toFile=FALSE, log.toConsole=FALSE, log.toAwslogs=TRUE,
+                awslogs.logGroup='rlearn-test', log.level='FINEST',
+                awslogs.logStream=stream)
+
+    logdebug(LETTERS)
+
+    result <- awslogs.getLogEvents('rlearn-test', stream)
+    log_regex <-
+        '[0-9]{4}(-[0-9]{2}){2} ([0-9]{2}:?){3} DEBUG::A\\.\\.\\. \\(truncated\\)'
+    expect_match(result$events$message[1], log_regex)
+
+    logReset()
+})
+
 test_that("lda is logged at info level", {
     stream <- UUIDgenerate()
     logger.init(log.toFile=FALSE, log.toConsole=FALSE, log.toAwslogs=TRUE,
@@ -95,7 +126,6 @@ test_that("lda is logged at info level", {
 })
 
 test_that("lda is logged at debug level", {
-    skip('TODO')
     stream <- UUIDgenerate()
     logger.init(log.toFile=FALSE, log.toConsole=FALSE, log.toAwslogs=TRUE,
                 awslogs.logGroup='rlearn-test', log.level='DEBUG',
@@ -118,6 +148,34 @@ test_that("lda is logged at debug level", {
                      removeRowValue=-1,
                      classVariableName='VAR47',
                      priorDistributionIsSample=TRUE)
+
+    result <- awslogs.getLogEvents('rlearn-test', stream)
+
+    logReset()
+})
+
+test_that("cloudwatch varsel logging works at debug level", {
+    stream <- UUIDgenerate()
+    logger.init(log.toFile=FALSE, log.toConsole=FALSE, log.toAwslogs=TRUE,
+                awslogs.logGroup='rlearn-test', log.level='DEBUG',
+                awslogs.logStream=stream)
+
+
+    lviFileName <- system.file("extdata", "ANALYSIS.csv", package = "rlearn")
+    uniqueVarFilePath <- system.file("extdata", "UNIQUEVAR.csv", package = "rlearn")
+    outDir <- '/opt/rlearn/tests/data/output'
+    outFileName <- 'UCORCOEF.csv'
+    outFilePath = paste(outDir, outFileName, sep=.Platform$file.sep)
+
+    xy <- read.csv(lviFileName, header=T, row.names=1)
+    uniquevar <- read.csv(uniqueVarFilePath, header=T, row.names=1,
+                          #stringsAsFactors=FALSE,
+                          strip.white=TRUE,
+                          na.strings = c("NA",""))
+
+    ucorcoef <- vs.getVarCorrelations(xy, uniquevar,
+                                      removeRowValue=-1,
+                                      removeRowColName='SORTGRP')
 
     result <- awslogs.getLogEvents('rlearn-test', stream)
 
