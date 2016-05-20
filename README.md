@@ -1,3 +1,5 @@
+[![Codeship Status for tesera/rlearn](https://codeship.com/projects/ded1d970-e236-0133-4701-1ec7b6a28617/status?branch=master)](https://codeship.com/projects/145545)
+
 # Learn R Library
 
 ## Components
