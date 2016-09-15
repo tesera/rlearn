@@ -5,4 +5,4 @@ R -e "libs_dir <- Sys.getenv('R_LIBS_USER');\
       dir.create(libs_dir, showWarnings = FALSE);\
       install.packages('devtools');\
       library(devtools);\
-      update(dev_package_deps('.'))"
+      update(dev_package_deps('.', dependencies=TRUE))"
