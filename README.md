@@ -121,6 +121,7 @@ $
 
 ## Development
 
+### Setup
 All contributors are welcome! To get started developing on `rlearn` you will need docker
 
 One you are setup with docker, clone this repo
@@ -129,12 +130,33 @@ One you are setup with docker, clone this repo
 $ git clone git@github.com:tesera/rlearn.git
 ```
 
-Enter the top level directory 
+Enter the top level directory
 
 ```console
-apt-get update && apt-get install -y libssl-dev libcurl4-openssl-dev texlive-latex-base texlive-latex-extra texinfo texlive-fonts-extra
-export R_LIBS_USER=./rlibs
-R -e 'install.packages(c("devtools", "logging", "subselect", "roxygen2", "testthat", "uuid", "tidyr", "dplyr"))'
+cd rlearn
+docker-compose run dev
+```
+
+Now you are in the docker container - install the dependencies required for rlearn
+
+``` console
+r install-dependencies.r
+```
+
+And you're all set to make changes to rlearn!
+
+To use your active development version of rlearn start an R session in the
+docker container
+
+``` console
+docker-compose run dev R
+```
+
+And load all the package resources
+
+```
+library(devtools)
+load_all('.')
 ```
 
 ## Testing (requires littler)
