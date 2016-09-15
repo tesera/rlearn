@@ -176,6 +176,16 @@ $ r ./test.r
 
 ### Documentation
 
+If your changes affect documentation, rebuild the documentation as follows:
+
+```console
+$ docker-compose run dev
+$ R
+> library(devtools)
+> document()
+```
+
+
 ### Contribution Guidelines
 
 - If you would like to contribute changes to rlearn, please follow [this guide](http://kbroman.org/github_tutorial/pages/fork.html) to fork, clone, create a branch, make your changes, push your branch to your fork, and open a pull request. Don't forget to run the tests!
