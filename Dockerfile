@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     python-pip \
     python-setuptools \
-&& rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*
 
 RUN pip install awscli
 
@@ -25,3 +25,6 @@ COPY install-dependencies.sh install-dependencies.sh
 RUN bash ./install-dependencies.sh
 
 COPY . $WD
+
+RUN R CMD build .
+RUN R CMD INSTALL --library=$R_LIBS_USER rlearn_1.0.0.tar.gz

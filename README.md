@@ -1,6 +1,6 @@
 [![Codeship Status for tesera/rlearn](https://codeship.com/projects/ded1d970-e236-0133-4701-1ec7b6a28617/status?branch=master)](https://codeship.com/projects/145545)
 
-# Learn R Library
+# rlearn
 
 ## Components
 
@@ -46,7 +46,15 @@ configuration file. See tests/data/expected for examples.
 
 ## Installing
 
-### Github via cloning
+There are a couple installation options
+
+- clone and install with `R CMD`
+- use `devtools` to instrall directly from github
+- install into a docker container using the provided `Dockerfile`
+
+Docker is the suggested method, as it provides a more consistent environment.
+
+### R CMD
 
 ```console
 $ git clone git@github.com:tesera/rlearn.git
@@ -55,7 +63,7 @@ $ R CMD BUILD .
 $ R CMD INSTALL rlearn_1.0.0.tar.gz
 ```
 
-### Github direct install via devtools
+### Devtools
 
 ```console
 $ R
@@ -63,7 +71,65 @@ $ R
 > install_github(repo="tesera/rlearn", ref="master", auth_token="<your_github_personal_access_token>")
 ```
 
+### Docker
+
+Clone the repository and build the docker image
+
+```console
+$ git clone git@github.com:tesera/rlearn.git
+$ cd rlearn
+$ docker built -t rlearn .
+
+```
+
+Grab a coffee, building the image will take a few minutes
+
+```
+Step 1 : FROM r-base:latest
+latest: Pulling from library/r-base
+9cd73496e13f: Downloading [=============================>                     ] 24.73 MB/42.07 MB
+f10af350cd29: Download complete
+eea7b33eea97: Download complete
+c91475e50472: Download complete
+1e5e5f6785b4: Download complete
+8c4091261ff6: Downloading [>                                                  ] 5.919 MB/322.1 MB
+...
+```
+
+To test if the image built successfully, run the following command
+
+```console
+docker run -it rlearn
+```
+
+That should drop you into an interactive R session where you can import and use rlearn
+
+```
+> library(rlearn)
+> 
+```
+
+## Usage
+
+Start R
+
+```console
+$ R
+# or, if you are using docker
+$ 
+```
+
 ## Development
+
+All contributors are welcome! To get started developing on `rlearn` you will need docker
+
+One you are setup with docker, clone this repo
+
+```console
+$ git clone git@github.com:tesera/rlearn.git
+```
+
+Enter the top level directory 
 
 ```console
 apt-get update && apt-get install -y libssl-dev libcurl4-openssl-dev texlive-latex-base texlive-latex-extra texinfo texlive-fonts-extra
