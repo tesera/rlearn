@@ -159,12 +159,28 @@ library(devtools)
 load_all('.')
 ```
 
-## Testing (requires littler)
+### Testing
+
+Unit tests are written using the
+[testthat](https://cran.r-project.org/web/packages/testthat/index.html)
+package.
+
+Unit tests are required for new functionality. Changes to existing codebase should not break existing tests, or existing tests should be updated if appropriate.
+
+Run the tests as follows
+
 ```console
 docker-compose run dev
 $ r ./test.r
 ```
 
-## Contributing
+### Documentation
 
-- [R Styleguide](https://google.github.io/styleguide/Rguide.xml)
+### Contribution Guidelines
+
+- If you would like to contribute changes to rlearn, please follow [this guide](http://kbroman.org/github_tutorial/pages/fork.html) to fork, clone, create a branch, make your changes, push your branch to your fork, and open a pull request. Don't forget to run the tests!
+- Please follow the [Wickham Style](http://adv-r.had.co.nz/Style.html) for your contributions to rlearn.
+
+## Getting Help
+
+For assistance with usage or development of rlearn, please file an issue on the [issue tracker](https://github.com/tesera/rlearn/issues).

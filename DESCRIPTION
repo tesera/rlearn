@@ -4,7 +4,8 @@ Version: 1.0.0
 Author: Tesera Systems Inc.
 Maintainer: Tesera Systems Inc. <oss@tesera.com>
 Description: Discriminant Analysis and Variable Selection.
-Depends: R (>= 3.2.2)
+Depends:
+    R (>= 3.2.2)
 LazyData: true
 Imports:
     subselect,
@@ -15,4 +16,6 @@ Imports:
     tidyr,
     dplyr
 License: MIT
-Suggests: testthat
+Suggests:
+    testthat
+RoxygenNote: 5.0.1
