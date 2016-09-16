@@ -2,6 +2,16 @@
 
 # rlearn
 
+Rlearn is an R package for a specific machine learning process. It provides
+variable selection and linear discriminant analysis model fitting and
+assessment which is linked to the variable selection results.
+
+The variable selection routine produces a list of candidate models. The linear
+discriminant analysis (LDA) routine fits and assesses the performance of LDA
+models for each candidate model from variable selection using leave-one-out
+cross validation. Finally, a function is provided to fit an LDA on an entire
+dataset for one model in the variable selection candidate list.
+
 ## Components
 
 ### Variable Selection
