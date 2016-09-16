@@ -17,5 +17,6 @@ Imports:
     dplyr
 License: MIT
 Suggests:
-    testthat
+    testthat,
+    roxygen2
 RoxygenNote: 5.0.1
