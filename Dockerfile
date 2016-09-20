@@ -23,4 +23,4 @@ COPY . $WD
 
 RUN bash install-dependencies.sh
 RUN R CMD build .
-RUN R CMD INSTALL --library=$R_LIBS_USER rlearn_1.0.0.tar.gz
+RUN R CMD INSTALL --library=$R_LIBS_USER rlearn_1.0.1.tar.gz
