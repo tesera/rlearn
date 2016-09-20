@@ -1,6 +1,8 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
-rm -rf rlibs
-mkdir rlibs
-
-install2.r -l $R_LIBS_USER devtools subselect testthat roxygen2 logging uuid dplyr tidyr
+R -e "libs_dir <- Sys.getenv('R_LIBS_USER');\
+      unlink(libs_dir, recursive=TRUE);\
+      dir.create(libs_dir, showWarnings = FALSE);\
+      install.packages('devtools');\
+      library(devtools);\
+      update(dev_package_deps('.', dependencies=TRUE))"

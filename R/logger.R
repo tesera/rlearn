@@ -17,6 +17,11 @@ cloudwatch <- function(msg, handler, ...) {
                             with(handler, logStreamName),
                             with(handler, region))
     epoch <- as.integer(as.POSIXct( Sys.time() ))*1000
+
+    # truncate long output and remove commas for AWS
+    if(length(msg) > 1) msg <- paste(msg[1], '... (truncated)', sep='')
+    msg <- gsub(",", " ", msg)
+
     logEvents <- sprintf('"timestamp=%s,message=%s"', epoch, msg)
     res <- awslogs.putLogEvents(with(handler, logGroupName),
                                 with(handler, logStreamName),

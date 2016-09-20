@@ -1,10 +1,11 @@
 Package: rlearn
 Title: rlearn
-Version: 1.0.0
+Version: 1.0.1
 Author: Tesera Systems Inc.
 Maintainer: Tesera Systems Inc. <oss@tesera.com>
-Description: Discriminant Analysis Variable Selection.
-Depends: R (>= 3.2.2)
+Description: Discriminant Analysis and Variable Selection.
+Depends:
+    R (>= 3.2.2)
 LazyData: true
 Imports:
     subselect,
@@ -15,4 +16,7 @@ Imports:
     tidyr,
     dplyr
 License: MIT
-Suggests: testthat
+Suggests:
+    testthat,
+    roxygen2
+RoxygenNote: 5.0.1

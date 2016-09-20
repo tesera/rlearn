@@ -1,4 +1,16 @@
-# Learn R Library
+[![Codeship Status for tesera/rlearn](https://codeship.com/projects/ded1d970-e236-0133-4701-1ec7b6a28617/status?branch=master)](https://codeship.com/projects/145545)
+
+# rlearn
+
+Rlearn is an R package for a specific machine learning process. It provides
+variable selection and linear discriminant analysis model fitting and
+assessment which is linked to the variable selection results.
+
+The variable selection routine produces a list of candidate models. The linear
+discriminant analysis (LDA) routine fits and assesses the performance of LDA
+models for each candidate model from variable selection using leave-one-out
+cross validation. Finally, a function is provided to fit an LDA on an entire
+dataset for one model in the variable selection candidate list.
 
 ## Components
 
@@ -44,7 +56,15 @@ configuration file. See tests/data/expected for examples.
 
 ## Installing
 
-### Github via cloning
+There are a couple installation options
+
+- clone and install with `R CMD`
+- use `devtools` to instrall directly from github
+- install into a docker container using the provided `Dockerfile`
+
+Docker is the suggested method, as it provides a more consistent environment.
+
+### R CMD
 
 ```console
 $ git clone git@github.com:tesera/rlearn.git
@@ -53,7 +73,7 @@ $ R CMD BUILD .
 $ R CMD INSTALL rlearn_1.0.0.tar.gz
 ```
 
-### Github direct install via devtools
+### Devtools
 
 ```console
 $ R
@@ -61,20 +81,126 @@ $ R
 > install_github(repo="tesera/rlearn", ref="master", auth_token="<your_github_personal_access_token>")
 ```
 
-## Development
+### Docker
+
+Clone the repository and build the docker image
 
 ```console
-apt-get update && apt-get install -y libssl-dev libcurl4-openssl-dev texlive-latex-base texlive-latex-extra texinfo texlive-fonts-extra
-export R_LIBS_USER=./rlibs
-R -e 'install.packages(c("devtools", "logging", "subselect", "roxygen2", "testthat", "uuid", "tidyr", "dplyr"))'
+$ git clone git@github.com:tesera/rlearn.git
+$ cd rlearn
+$ docker built -t rlearn .
+
 ```
 
-## Testing (requires littler)
+Grab a coffee, building the image will take a few minutes
+
+```
+Step 1 : FROM r-base:latest
+latest: Pulling from library/r-base
+9cd73496e13f: Downloading [=============================>                     ] 24.73 MB/42.07 MB
+f10af350cd29: Download complete
+eea7b33eea97: Download complete
+c91475e50472: Download complete
+1e5e5f6785b4: Download complete
+8c4091261ff6: Downloading [>                                                  ] 5.919 MB/322.1 MB
+...
+```
+
+To test if the image built successfully, run the following command
+
+```console
+docker run -it rlearn
+```
+
+That should drop you into an interactive R session where you can import and use rlearn
+
+```
+> library(rlearn)
+> 
+```
+
+## Usage
+
+Start R
+
+```console
+$ R
+# or, if you are using docker
+$ 
+```
+
+## Development
+
+### Setup
+All contributors are welcome! To get started developing on `rlearn` you will need docker
+
+One you are setup with docker, clone this repo
+
+```console
+$ git clone git@github.com:tesera/rlearn.git
+```
+
+Enter the top level directory
+
+```console
+cd rlearn
+docker-compose run dev
+```
+
+Now you are in the docker container - install the dependencies required for rlearn
+
+``` console
+r install-dependencies.r
+```
+
+And you're all set to make changes to rlearn!
+
+To use your active development version of rlearn start an R session in the
+docker container
+
+``` console
+docker-compose run dev R
+```
+
+And load all the package resources
+
+```
+library(devtools)
+load_all('.')
+```
+
+### Testing
+
+Unit tests are written using the
+[testthat](https://cran.r-project.org/web/packages/testthat/index.html)
+package.
+
+Unit tests are required for new functionality. Changes to existing codebase should not break existing tests, or existing tests should be updated if appropriate.
+
+Run the tests as follows
+
 ```console
 docker-compose run dev
 $ r ./test.r
 ```
 
-## Contributing
+### Documentation
 
-- [R Styleguide](https://google.github.io/styleguide/Rguide.xml)
+If your changes affect documentation, rebuild the documentation as follows:
+
+```console
+$ docker-compose run dev
+$ R
+> library(devtools)
+> document()
+```
+
+
+### Contribution Guidelines
+
+- If you would like to contribute changes to rlearn, please follow [this guide](http://kbroman.org/github_tutorial/pages/fork.html) to fork, clone, create a branch, make your changes, push your branch to your fork, and open a pull request. Don't forget to run the tests!
+- Please follow the [Wickham Style](http://adv-r.had.co.nz/Style.html) for your contributions to rlearn.
+
+## Getting Help
+
+For assistance with usage or development of rlearn, please file an issue on the [issue tracker](https://github.com/tesera/rlearn/issues).
