@@ -1,6 +1,6 @@
 Package: rlearn
 Title: rlearn
-Version: 1.0.0
+Version: 1.0.1
 Author: Tesera Systems Inc.
 Maintainer: Tesera Systems Inc. <oss@tesera.com>
 Description: Discriminant Analysis and Variable Selection.
